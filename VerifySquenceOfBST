@@ -1,0 +1,47 @@
+#pragma once
+
+//输入一个整数数组，判断该数组是不是某二叉搜索树的后续遍历序列的结果。
+//假设输入的数组任意两个数字各不相同
+//5 6 7 9 11 10 8
+
+//size为数组长度
+bool VerifySquenceOfBST(int *arr, int size)
+{
+	if (arr == NULL || size <= 0)
+		return false;
+
+	//后序序列最后一个数字为根结点
+	int root = arr[size - 1];
+
+	//二叉搜索树中左子树结点都小于根节点 
+	int leftSize = 0;
+
+	while (leftSize < size - 1)
+	{
+		if (arr[leftSize] > root)
+			break;
+
+		leftSize++;
+	}	
+
+	//二叉搜索树中右子树结点都大于根节点 
+	int rightSize = leftSize;
+	while (rightSize < size-1)
+	{
+		if (arr[rightSize] < root)
+			return false;
+		rightSize++;
+	}
+
+	//判断左子树是否为二叉搜索树
+	bool left = true;
+	if (leftSize > 0)
+		left = VerifySquenceOfBST(arr, leftSize);
+
+	//判断右子树是否为二叉搜索树
+	bool right = true;
+	if (leftSize < size - 1)
+		right = VerifySquenceOfBST(arr + leftSize, size - leftSize - 1);
+
+	return left && right;
+}
